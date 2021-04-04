@@ -133,7 +133,8 @@ class PostsViewsTests(TestCase):
                 kwargs={'username': 'Amalia', 'post_id': '1'}))
         form_fields = {
             'text': forms.CharField,
-            'group': forms.ChoiceField
+            'group': forms.ChoiceField,
+            'image': froms.ImageField
         }
         for value, expected in form_fields.items():
             with self.subTest(value=value):

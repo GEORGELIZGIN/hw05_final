@@ -134,7 +134,7 @@ class PostsViewsTests(TestCase):
         form_fields = {
             'text': forms.CharField,
             'group': forms.ChoiceField,
-            'image': froms.ImageField
+            'image': forms.ImageField,
         }
         for value, expected in form_fields.items():
             with self.subTest(value=value):

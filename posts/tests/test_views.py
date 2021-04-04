@@ -137,7 +137,7 @@ class PostsViewsTests(TestCase):
             'image': forms.ImageField,
         }
         post = response.context['form'].save(commit=False)
-        self.assertIsInstance(post, Post)
+        self.assertEqual(post, PostsViewsTests.post)
         for value, expected in form_fields.items():
             with self.subTest(value=value):
                 form_field = response.context['form'].fields[value]

@@ -165,8 +165,9 @@ class PostsViewsTests(TestCase):
         )
         self.assertEqual(follows + 1, Follow.objects.all().count())
         self.assertTrue(
-            Follow.objects.filter(user=PostsViewsTests.user,
-            author=PostsViewsTests.another_user).exists()
+            Follow.objects.filter(
+                user=PostsViewsTests.user,
+                author=PostsViewsTests.another_user).exists()
         )
         response = self.authorized_client.get(
             reverse(

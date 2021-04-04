@@ -161,14 +161,12 @@ def follow_index(request):
 @login_required
 def profile_follow(request, username):
     if request.user.follower.filter(
-        author__username=username
-        ).exists():
+        author__username=username).exists():
         return redirect(
             reverse_lazy(
                 'posts:profile',
                 kwargs={'username': username}
-            )
-        )
+            ))
     author = User.objects.get(username=username)
     Follow.objects.create(
         user=request.user,

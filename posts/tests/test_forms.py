@@ -128,10 +128,6 @@ class PostsFormTests(TestCase):
             data=form_data,
             follow=True
         )
-        self.assertIsInstance(
-            response.context['form'].save(commit=False),
-            Post
-        )
         self.assertRedirects(
             response,
             reverse(

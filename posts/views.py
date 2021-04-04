@@ -159,8 +159,7 @@ def follow_index(request):
         {
             'page': page,
             'follow_page': follow_page,
-            'paginator': paginator
-            })
+            'paginator': paginator})
 
 
 @login_required

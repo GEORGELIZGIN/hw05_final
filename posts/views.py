@@ -156,7 +156,11 @@ def follow_index(request):
     follow_page = 'follow_' + str(page_number)
     return render(
         request, 'follow.html',
-        {'page': page, 'follow_page': follow_page})
+        {
+            'page': page,
+            'follow_page': follow_page,
+            'paginator': paginator
+            })
 
 
 @login_required

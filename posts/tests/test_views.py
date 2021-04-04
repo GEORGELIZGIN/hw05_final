@@ -136,6 +136,8 @@ class PostsViewsTests(TestCase):
             'group': forms.ChoiceField,
             'image': forms.ImageField,
         }
+        post = response.context['form'].save(commit=False)
+        self.assertIsInstance(post, Post)
         for value, expected in form_fields.items():
             with self.subTest(value=value):
                 form_field = response.context['form'].fields[value]

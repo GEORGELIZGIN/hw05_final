@@ -5,10 +5,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import cache_page
 
 from .forms import PostForm, CommentForm
-from .models import Group, Post, Comment, Follow
+from .models import Group, Post, Follow
 
 User = get_user_model()
 
@@ -105,7 +104,6 @@ def post_edit(request, username, post_id):
                 kwargs={'username': username, 'post_id': post_id}
             )
         )
-        #return render(request, 'post_new.html', {'form': form})
     context = {
         'form': form,
     }
@@ -115,8 +113,8 @@ def post_edit(request, username, post_id):
 def page_not_found(request, exception):
     return render(
         request, 
-        'misc/404.html', 
-        {'path': request.path}, 
+        'misc/404.html',
+        {'path': request.path},
         status=404
     )
 
@@ -141,11 +139,12 @@ def add_comment(request, username, post_id):
             )
         )
 
-        
+
 @login_required
 def follow_index(request):
     follows = request.user.follower.all()
-    follows = follows.prefetch_related('author').prefetch_related('author__posts')
+    follows = follows.prefetch_related(
+        'author').prefetch_related('author__posts')
     posts = []
     for follow in follows:
         author = follow.author

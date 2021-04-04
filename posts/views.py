@@ -160,8 +160,10 @@ def follow_index(request):
 
 @login_required
 def profile_follow(request, username):
-    if request.user.follower.filter(
-        author__username=username).exists():
+    if(
+        request.user.follower.filter(
+            author__username=username).exists()
+    ):
         return redirect(
             reverse_lazy(
                 'posts:profile',

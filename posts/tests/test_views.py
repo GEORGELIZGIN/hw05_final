@@ -169,15 +169,17 @@ class PostsViewsTests(TestCase):
                 user=PostsViewsTests.user,
                 author=PostsViewsTests.another_user).exists()
         )
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',
                 kwargs={'username': 'a'})
         )
         self.assertEqual(follows, Follow.objects.all().count())
         self.assertFalse(
-            Follow.objects.filter(user=PostsViewsTests.user,
-            author=PostsViewsTests.another_user).exists()
+            Follow.objects.filter(
+                user=PostsViewsTests.user,
+                author=PostsViewsTests.another_user
+                ).exists()
         )
 
     def test_posts_from_followings(self):
@@ -185,8 +187,7 @@ class PostsViewsTests(TestCase):
             author=PostsViewsTests.another_user, user=PostsViewsTests.user)
         response_from_follower = (
             self.authorized_client.get(
-                reverse('posts:follow_index')
-                ))
+                reverse('posts:follow_index')))
         posts_for_follower = response_from_follower.context['page']
         response_from_not_follower = (
             self.another_auth_client.get(
@@ -195,26 +196,24 @@ class PostsViewsTests(TestCase):
         posts_for_not_follower = response_from_not_follower.context['page']
         new_post = (
             Post.objects.create(text='j', author=PostsViewsTests.another_user)
-            )
+        )
         response_from_follower = (
             self.authorized_client.get(
-                reverse('posts:follow_index')
-                ))
+                reverse('posts:follow_index')))
         response_from_not_follower = (
             self.another_auth_client.get(
-                reverse('posts:follow_index')
-            ))
+                reverse('posts:follow_index')))
         posts_for_follower_after_creating_new = (
             response_from_follower.context['page']
-            )
+        )
         posts_for_not_follower_after_creating_new = (
             response_from_not_follower.context['page']
-            )
+        )
         self.assertNotIn(new_post, posts_for_not_follower)
         self.assertNotIn(new_post, posts_for_not_follower_after_creating_new)
         self.assertNotIn(new_post, posts_for_follower)
         self.assertIn(new_post, posts_for_follower_after_creating_new)
-    
+
 
 class PaginatorTestViews(TestCase):
     def setUp(self):

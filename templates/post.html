@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %} Пост {% endblock %}
+{% block content %}
+<main role="main" class="container">
+    <div class="row">
+        {% include 'include/author_card.html' %}
+
+        <div class="col-md-9">
+
+          {% include 'include/post_item.html' %}    
+     </div>
+    </div>
+</main>
+
+{% include "include/comments.html" %}
+
+{% endblock %}

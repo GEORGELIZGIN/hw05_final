@@ -235,6 +235,8 @@ class PaginatorTestViews(TestCase):
 
     def test_first_page_containse_ten_records(self):
         response = self.guest_client.get(reverse('posts:index'))
+        print(response.context['paginator'])
+        self.assertTrue('paginator' not in response.context)
         self.assertEqual(len(response.context.get('page').object_list), 10)
 
     def test_second_page_containse_three_records(self):

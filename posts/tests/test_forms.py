@@ -155,7 +155,7 @@ class PostsFormTests(TestCase):
         form_data = {
             'text': 'ga'
         }
-        response = self.authorized_client.post(
+        self.authorized_client.post(
             reverse(
                 'posts:add_comment',
                 kwargs={'username': 'Амалия', 'post_id': post.pk}),

@@ -15,7 +15,7 @@ User = get_user_model()
 def index(request):
     paginator = Paginator(Post.objects.all(), 10)
     page_number = request.GET.get('page')
-    page = paginator.get_page(page_number)
+    page = paginator.get_page(page_number).object_list
     index_page = 'index_' + str(page_number)
     return render(
         request,

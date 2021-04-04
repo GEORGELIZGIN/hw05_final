@@ -41,7 +41,7 @@ class PostsViewsTests(TestCase):
             content=cls.small_gif,
             content_type='image/gif'
         )
-        Post.objects.create(
+        cls.post = Post.objects.create(
             text='aaaa',
             author=cls.user,
             group=cls.group,

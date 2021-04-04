@@ -158,7 +158,7 @@ class PostsViewsTests(TestCase):
 
     def test_subscribe_and_unsuscribe_by_auth_user(self):
         follows = Follow.objects.all().count()
-        response = self.authorized_client.get(
+        self.authorized_client.get(
             reverse(
                 'posts:profile_follow',
                 kwargs={'username': 'a'})
@@ -179,7 +179,7 @@ class PostsViewsTests(TestCase):
             Follow.objects.filter(
                 user=PostsViewsTests.user,
                 author=PostsViewsTests.another_user
-                ).exists()
+            ).exists()
         )
 
     def test_posts_from_followings(self):

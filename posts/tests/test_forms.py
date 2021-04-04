@@ -7,7 +7,7 @@ import tempfile
 from django.conf import settings
 from django.core.files.uploadedfile import SimpleUploadedFile
 
-from posts.models import Group, Post, Comment
+from posts.models import Group, Post
 
 User = get_user_model()
 
@@ -165,11 +165,11 @@ class PostsFormTests(TestCase):
         self.assertTrue(
             post.comments.filter(text='ga', author=self.user).exists()
         )
-        comments = post.comments.count() 
+        comments = post.comments.count()
         form_data = {
             'text': 'gaga'
         }
-        response = self.guest_client.post(
+        self.guest_client.post(
             reverse(
                 'posts:add_comment',
                 kwargs={'username': 'Амалия', 'post_id': post.pk}),

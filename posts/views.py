@@ -164,8 +164,7 @@ def profile_follow(request, username):
     if(
         request.user.follower.filter(
             author__username=username).exists() or (
-                request.user.username == username
-            )
+                request.user.username == username)
     ):
         return redirect(
             reverse_lazy(

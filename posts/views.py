@@ -15,12 +15,12 @@ User = get_user_model()
 def index(request):
     paginator = Paginator(Post.objects.all(), 10)
     page_number = request.GET.get('page')
-    page = paginator.get_page(page_number).object_list
+    page = paginator.get_page(page_number)
     index_page = 'index_' + str(page_number)
     return render(
         request,
         'index.html',
-        {'page': page, 'index_page': index_page}
+        {'page': page, 'index_page': index_page, 'paginator': paginator}
     )
 
 

@@ -112,7 +112,7 @@ def post_edit(request, username, post_id):
 
 def page_not_found(request, exception):
     return render(
-        request, 
+        request,
         'misc/404.html',
         {'path': request.path},
         status=404
@@ -149,17 +149,20 @@ def follow_index(request):
     for follow in follows:
         author = follow.author
         posts.extend(author.posts.all())
-    paginator=Paginator(posts, 10)
+    paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    follow_page = 'follow_' + str(page_number) 
-    return render(request, 'follow.html', {'page': page, 'follow_page': follow_page})
+    follow_page = 'follow_' + str(page_number)
+    return render(
+        request, 'follow.html',
+        {'page': page, 'follow_page': follow_page})
 
 
 @login_required
 def profile_follow(request, username):
     if request.user.follower.filter(
-        author__username=username).exists():
+        author__username=username
+        ).exists():
         return redirect(
             reverse_lazy(
                 'posts:profile',
@@ -181,7 +184,10 @@ def profile_follow(request, username):
 
 @login_required
 def profile_unfollow(request, username):
-    follow = get_object_or_404(Follow, user=request.user, author__username=username)
+    follow = get_object_or_404(
+        Follow,
+        user=request.user,
+        author__username=username)
     follow.delete()
     return redirect(
         reverse_lazy(

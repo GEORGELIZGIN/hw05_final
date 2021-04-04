@@ -104,9 +104,9 @@ def post_edit(request, username, post_id):
                 kwargs={'username': username, 'post_id': post_id}
             )
         )
-        return render(request, 'post_new.html', {'form': form})
     context = {
         'form': form,
+        'post': post
     }
     return render(request, 'post_new.html', context)
 

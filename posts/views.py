@@ -148,12 +148,10 @@ def follow_index(request):
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    follow_page = f'follow_{request.user.username}_{page_number}'
     return render(
         request, 'follow.html',
         {
             'page': page,
-            'follow_page': follow_page,
             'paginator': paginator})
 
 

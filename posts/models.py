@@ -48,8 +48,9 @@ class Comment(models.Model):
         related_name='comments',
         verbose_name='автор')
     text = models.TextField(verbose_name='текст')
-    created = models.DateTimeField(auto_now_add=True,
-    verbose_name='дата создания')
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='дата создания')
 
     class Meta:
         ordering = ('-created',)
@@ -74,8 +75,9 @@ class Follow(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=['user', 'author'],
-            name='follow_constraint'),
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='follow_constraint'),
         ]
 
     def __str__(self):

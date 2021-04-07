@@ -141,7 +141,6 @@ def add_comment(request, username, post_id):
     )
 
 
-
 @login_required
 def follow_index(request):
     posts = Post.objects.filter(

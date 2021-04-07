@@ -40,6 +40,7 @@ class PostURLTests(TestCase):
         private_urls = [
             '/new/',
             '/Amalia/1/edit/',
+            '/follow/',
         ]
         for url in public_urls:
             with self.subTest(url=url):
@@ -50,10 +51,13 @@ class PostURLTests(TestCase):
                 response = self.authorized_client.get(url)
                 self.assertEqual(response.status_code, 200)
 
-    def test_posts_new_url_post_edit_url_redirects_anonymous_user(self):
+    def test_posts_new_edit_comment_follow_url_redirects_anonymous_user(self):
         urls_to_redirects = {
             '/new/': '/auth/login/?next=/new/',
             '/Amalia/1/edit/': '/auth/login/?next=/Amalia/1/edit/',
+            '/Amalia/1/comment/': '/auth/login/?next=/Amalia/1/comment/',
+            '/Amalia/follow/': '/auth/login/?next=/Amalia/follow/',
+            '/Amalia/unfollow/': '/auth/login/?next=/Amalia/unfollow/',
         }
         for url, redirect in urls_to_redirects.items():
             with self.subTest(url=url):
@@ -71,7 +75,9 @@ class PostURLTests(TestCase):
             '/': 'index.html',
             '/group/group/': 'group.html',
             '/new/': 'posts/new_post.html',
+            '/Amalia/': 'profile.html',
             '/Amalia/1/edit/': 'post_new.html',
+            '/follow/': 'follow.html',
         }
         for reverse_name, template in templates_urls_names.items():
             with self.subTest():

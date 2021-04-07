@@ -40,22 +40,43 @@ class Comment(models.Model):
     post = models.ForeignKey(
         Post,
         on_delete=models.CASCADE,
-        related_name='comments')
+        related_name='comments',
+        verbose_name='пост')
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='comments')
-    text = models.TextField()
-    created = models.DateTimeField(auto_now_add=True)
+        related_name='comments',
+        verbose_name='автор')
+    text = models.TextField(verbose_name='текст')
+    created = models.DateTimeField(auto_now_add=True,
+    verbose_name='дата создания')
+
+    class Meta:
+        ordering = ('-created',)
+
+    def __str__(self):
+        return self.text[:15]
 
 
 class Follow(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='follower')
+        related_name='follower',
+        verbose_name='Подписчик'
+    )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='following'
+        related_name='following',
+        verbose_name='Автор'
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=['user', 'author'],
+            name='follow_constraint'),
+        ]
+
+    def __str__(self):
+        return f'{self.user} подписан на {self.author}'

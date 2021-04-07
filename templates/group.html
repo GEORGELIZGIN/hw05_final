@@ -5,8 +5,8 @@
 <p> {{ group.description }} </p>
 
   {% for post in page %}
-  {% include "include/post_item.html" %}
-<hr>
+    {% include "include/post_item.html" %}
+    <hr>
   {% endfor %}
   {% include "include/paginator.html" %}
 

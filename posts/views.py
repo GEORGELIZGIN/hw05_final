@@ -16,7 +16,7 @@ def index(request):
     paginator = Paginator(Post.objects.all(), 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    index_page = 'index_' + str(page_number)
+    index_page = f'index_{page_number}'
     return render(
         request,
         'index.html',
@@ -133,27 +133,23 @@ def add_comment(request, username, post_id):
         comment.author = request.user
         comment.post = post
         comment.save()
-        return redirect(
-            reverse_lazy(
-                'posts:post',
-                kwargs={'username': username, 'post_id': post_id}
-            )
+    return redirect(
+        reverse_lazy(
+            'posts:post',
+            kwargs={'username': username, 'post_id': post_id}
         )
+    )
+
 
 
 @login_required
 def follow_index(request):
-    follows = request.user.follower.all()
-    follows = follows.prefetch_related(
-        'author').prefetch_related('author__posts')
-    posts = []
-    for follow in follows:
-        author = follow.author
-        posts.extend(author.posts.all())
+    posts = Post.objects.filter(
+        author__following__user=request.user)
     paginator = Paginator(posts, 10)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
-    follow_page = 'follow_' + str(page_number)
+    follow_page = f'follow_{request.user.username}_{page_number}'
     return render(
         request, 'follow.html',
         {

@@ -1,11 +1,11 @@
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
-from django.urls import reverse
 import shutil
 import tempfile
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase
+from django.urls import reverse
 
 from posts.models import Group, Post
 
@@ -155,12 +155,18 @@ class PostsFormTests(TestCase):
         form_data = {
             'text': 'ga'
         }
-        self.authorized_client.post(
+        response = self.authorized_client.post(
             reverse(
                 'posts:add_comment',
                 kwargs={'username': 'Амалия', 'post_id': post.pk}),
             data=form_data,
+            follow=True
         )
+        self.assertRedirects(
+            response,
+            reverse(
+                'posts:post',
+                kwargs={'username': 'Амалия', 'post_id': post.pk}))
         self.assertEqual(post.comments.count(), comments + 1)
         self.assertTrue(
             post.comments.filter(text='ga', author=self.user).exists()

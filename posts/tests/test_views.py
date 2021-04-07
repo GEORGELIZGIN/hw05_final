@@ -1,14 +1,15 @@
-from django import forms
-from django.contrib.auth import get_user_model
-from django.test import Client, TestCase
-from django.urls import reverse
 import shutil
 import tempfile
+import time
 
+from django import forms
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import Client, TestCase
+from django.urls import reverse
 
-from posts.models import Group, Post, Follow
+from posts.models import Follow, Group, Post, Comment
 
 User = get_user_model()
 
@@ -159,7 +160,7 @@ class PostsViewsTests(TestCase):
         response = self.authorized_client.get('/lm/')
         self.assertEqual(response.status_code, 404)
 
-    def test_subscribe_and_unsuscribe_by_auth_user(self):
+    def test_subscribe_by_auth_user(self):
         follows = Follow.objects.all().count()
         self.authorized_client.get(
             reverse(
@@ -172,12 +173,18 @@ class PostsViewsTests(TestCase):
                 user=PostsViewsTests.user,
                 author=PostsViewsTests.another_user).exists()
         )
+
+    def test_unsuscribe_by_auth_user(self):
+        Follow.objects.create(
+            author=PostsViewsTests.another_user,
+            user=PostsViewsTests.user)
+        follows = Follow.objects.all().count()
         self.authorized_client.get(
             reverse(
                 'posts:profile_unfollow',
                 kwargs={'username': 'a'})
         )
-        self.assertEqual(follows, Follow.objects.all().count())
+        self.assertEqual(follows - 1, Follow.objects.all().count())
         self.assertFalse(
             Follow.objects.filter(
                 user=PostsViewsTests.user,
@@ -191,7 +198,7 @@ class PostsViewsTests(TestCase):
         response_from_follower = (
             self.authorized_client.get(
                 reverse('posts:follow_index')))
-        posts_for_follower = response_from_follower.context['page']
+        posts_for_follower = response_from_follower.context['page'].object_list
         response_from_not_follower = (
             self.another_auth_client.get(
                 reverse('posts:follow_index')
@@ -207,7 +214,7 @@ class PostsViewsTests(TestCase):
             self.another_auth_client.get(
                 reverse('posts:follow_index')))
         posts_for_follower_after_creating_new = (
-            response_from_follower.context['page']
+            response_from_follower.context['page'].object_list
         )
         posts_for_not_follower_after_creating_new = (
             response_from_not_follower.context['page']
